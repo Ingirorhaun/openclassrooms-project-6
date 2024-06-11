@@ -1,4 +1,5 @@
 import { getPhotographers } from "../utils/fetchData.js";
+import { photographerTemplate } from "../templates/photographer.js";
 
 const displayData = (photographers) => {
     const photographersSection = document.querySelector(".photographer_section");

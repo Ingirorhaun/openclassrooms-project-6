@@ -1,7 +1,9 @@
+import { closeContactModal, displayContactModal, handleFormSubmit } from "../utils/contactForm.js";
 import { getPhotographerById, getMediaByPhotographerId } from "../utils/fetchData.js";
 import { readLikedMediaLocalStorage, updateLikedMediaLocalStorage } from "../utils/localStorage.js";
 
 let media
+let currentlySelectedMediaIndex
 
 const init = async () => {
     const photographerId = new URL(window.location.href).searchParams.get('id')
@@ -22,6 +24,11 @@ const init = async () => {
     populateLikesCounter(photographer.price, media)
     populateMediaSection(media)
     createSortMenuEventListeners()
+    createPreviousNextButtonsEventListeners()
+    document.getElementsByClassName('contact_button')[0].addEventListener('click', displayContactModal)
+    document.getElementById('lightbox-modal').getElementsByClassName('close-btn')[0].addEventListener('click', closeLightbox)
+    document.getElementById('contact_modal').getElementsByClassName('close-btn')[0].addEventListener('click', closeContactModal)
+    document.getElementsByTagName('form')[0].addEventListener('submit', handleFormSubmit)
 }
 
 const populatePhotographerInfoSection = (photographer) => {
@@ -66,6 +73,7 @@ const populateMediaSection = (media, sortMode) => {
     });
 
     document.getElementById("media-section")?.appendChild(mediaGallery)
+    createCardsEventListeners()
     createLikeEventListeners()
 }
 
@@ -127,6 +135,25 @@ const createLikeEventListeners = () => {
 
 }
 
+const createCardsEventListeners = () => {
+    const cards = document.getElementsByClassName('media-card')
+    Array.from(cards).forEach(card => {
+        const link = card.children[0]
+        link.addEventListener('click', () => {
+            setLightboxShownMedia(card.dataset.id)
+            openLightbox()
+        })
+    })
+}
+
+const createPreviousNextButtonsEventListeners = () => {
+    const previousButton = document.getElementById('previous-btn')
+    const nextButton = document.getElementById('next-btn')
+
+    previousButton.addEventListener('click', () => setLightboxShownMedia(media[currentlySelectedMediaIndex - 1].id))
+    nextButton.addEventListener('click', () => setLightboxShownMedia(media[currentlySelectedMediaIndex + 1].id))
+}
+
 const createSortMenuEventListeners = () => {
     const sortButton = document.getElementsByClassName('dropbtn')[0]
     const sortMenu = document.getElementsByClassName('dropdown-items')[0]
@@ -181,6 +208,43 @@ const updateLikesCounter = (card, value) => {
     totalLikesCounter.innerText = Number(totalLikesCounter.innerText.substring(0, totalLikesCounter.innerText.indexOf("❤︎"))) + value + "❤︎"
 }
 
+const openLightbox = () => {
+    const lightboxModal = document.getElementById('lightbox-modal')
+    lightboxModal.style.display = 'block';
+}
 
+const closeLightbox = () => {
+    const lightboxModal = document.getElementById('lightbox-modal')
+    lightboxModal.style.display = 'none';
+}
+
+const setLightboxShownMedia = (mediaId) => {
+    const mediaElement = media.find(el => el.id == mediaId)
+    currentlySelectedMediaIndex = media.findIndex(el => el.id == mediaId)
+    const mediaItemPlaceholder = document.getElementById('media-item')
+    if (mediaElement.image) {
+        mediaItemPlaceholder.innerHTML = `
+            <img src='assets/images/media/${mediaElement.image}' alt='${mediaElement.title}'/>
+            <div class="media-title">${mediaElement.title}</div>
+         `
+    } else {
+        mediaItemPlaceholder.innerHTML = `
+        <video controls src='assets/images/media/${mediaElement.video}' alt='${mediaElement.title}'></video>
+        <div class="media-title">${mediaElement.title}</div>
+     `
+    }
+
+    //hide previous/next buttons if we are at the beginning/end of the array
+    if (currentlySelectedMediaIndex == 0) {
+        //hide previous button
+        document.getElementById('previous-btn').style.visibility = 'hidden'
+    } else if (currentlySelectedMediaIndex == (media.length - 1)) {
+        //hide next button
+        document.getElementById('next-btn').style.visibility = 'hidden'
+    } else {
+        document.getElementById('previous-btn').style.visibility = 'visible'
+        document.getElementById('next-btn').style.visibility = 'visible'
+    }
+}
 
 init();
