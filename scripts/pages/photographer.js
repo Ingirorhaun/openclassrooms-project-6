@@ -1,9 +1,9 @@
 import { closeContactModal, displayContactModal, handleFormSubmit } from "../utils/contactForm.js";
 import { getPhotographerById, getMediaByPhotographerId } from "../utils/fetchData.js";
+import { initLightbox, openLightbox } from "../utils/lightbox.js";
 import { readLikedMediaLocalStorage, updateLikedMediaLocalStorage } from "../utils/localStorage.js";
 
 let media
-let currentlySelectedMediaIndex
 
 const init = async () => {
     const photographerId = new URL(window.location.href).searchParams.get('id')
@@ -24,9 +24,9 @@ const init = async () => {
     populateLikesCounter(photographer.price, media)
     populateMediaSection(media)
     createSortMenuEventListeners()
-    createPreviousNextButtonsEventListeners()
+
     document.getElementsByClassName('contact_button')[0].addEventListener('click', displayContactModal)
-    document.getElementById('lightbox-modal').getElementsByClassName('close-btn')[0].addEventListener('click', closeLightbox)
+    initLightbox(media)
     document.getElementById('contact_modal').getElementsByClassName('close-btn')[0].addEventListener('click', closeContactModal)
     document.getElementsByTagName('form')[0].addEventListener('submit', handleFormSubmit)
 }
@@ -42,6 +42,10 @@ const populatePhotographerInfoSection = (photographer) => {
     <p class='tagline'>${tagline}</p>
     `
     photographerPhoto.setAttribute('src', `assets/images/photographers/thumbnails/${portrait.substring(0, portrait.indexOf('.'))}_thumb.jpg`)
+    photographerPhoto.setAttribute('alt', `${name}`)
+
+    //insert the photographer name in the contact modal as well
+    document.getElementById('contact_modal').querySelector('h1').innerHTML += `<br/>${name}`
 }
 
 const populateMediaSection = (media, sortMode) => {
@@ -84,14 +88,14 @@ const generateImageCard = (mediaElement) => {
     card.dataset.id = id;
     card.dataset.liked = liked
     card.innerHTML = `
-        <a alt="${title}">
+        <a alt="${title}" href="#">
             <figure>
                 <img src="assets/images/media/thumbnail_${image}" alt="${title}"/>
             </figure>
         </a>
         <div>
             <p>${title}</p>
-            <span><p aria-label="likes">${likes}</p><button class="like-btn">❤︎</button></span>
+            <span><p aria-label="likes">${likes}</p><button class="like-btn" aria-label="like">❤︎</button></span>
         </div>
     `
     return card
@@ -104,14 +108,14 @@ const generateVideoCard = (mediaElement) => {
     card.dataset.id = id;
     card.dataset.liked = liked
     card.innerHTML = `
-        <a alt="${title}">
+        <a alt="${title}" href="#">
             <figure>
                 <video src="assets/images/media/${video}" alt="${title}"/>
             </figure>
         </a>
         <div>
             <p>${title}</p>
-            <span><p aria-label="likes">${likes}</p><button class="like-btn">❤︎</button></span>
+            <span><p aria-label="likes">${likes}</p><button class="like-btn" aria-label="like">❤︎</button></span>
         </div>
     `
     return card
@@ -122,7 +126,7 @@ const populateLikesCounter = (price, media) => {
     let totalLikes = media.reduce((sum, el) => sum + el.likes, 0)
 
     likesCounter.innerHTML = `
-    <p class="totalLikes">${totalLikes}❤︎</p>
+    <p class="totalLikes" aria-label="Nombre total de likes">${totalLikes}❤︎</p>
     <p>${price}€/jour</p>
     `
 }
@@ -140,18 +144,9 @@ const createCardsEventListeners = () => {
     Array.from(cards).forEach(card => {
         const link = card.children[0]
         link.addEventListener('click', () => {
-            setLightboxShownMedia(card.dataset.id)
-            openLightbox()
+            openLightbox(card.dataset.id)
         })
     })
-}
-
-const createPreviousNextButtonsEventListeners = () => {
-    const previousButton = document.getElementById('previous-btn')
-    const nextButton = document.getElementById('next-btn')
-
-    previousButton.addEventListener('click', () => setLightboxShownMedia(media[currentlySelectedMediaIndex - 1].id))
-    nextButton.addEventListener('click', () => setLightboxShownMedia(media[currentlySelectedMediaIndex + 1].id))
 }
 
 const createSortMenuEventListeners = () => {
@@ -166,6 +161,7 @@ const createSortMenuEventListeners = () => {
         sortMenu.style.display = 'flex'
     })
 
+    //close the sort menu if the user clicks outside of it
     window.addEventListener('click', (e) => {
         if (e.target != sortMenu && e.target != sortButton && sortMenu.style.display == 'flex') {
             sortMenu.style.display = 'none'
@@ -206,45 +202,6 @@ const updateLikesCounter = (card, value) => {
     //increase total likes counter
     const totalLikesCounter = document.getElementsByClassName('totalLikes')[0]
     totalLikesCounter.innerText = Number(totalLikesCounter.innerText.substring(0, totalLikesCounter.innerText.indexOf("❤︎"))) + value + "❤︎"
-}
-
-const openLightbox = () => {
-    const lightboxModal = document.getElementById('lightbox-modal')
-    lightboxModal.style.display = 'block';
-}
-
-const closeLightbox = () => {
-    const lightboxModal = document.getElementById('lightbox-modal')
-    lightboxModal.style.display = 'none';
-}
-
-const setLightboxShownMedia = (mediaId) => {
-    const mediaElement = media.find(el => el.id == mediaId)
-    currentlySelectedMediaIndex = media.findIndex(el => el.id == mediaId)
-    const mediaItemPlaceholder = document.getElementById('media-item')
-    if (mediaElement.image) {
-        mediaItemPlaceholder.innerHTML = `
-            <img src='assets/images/media/${mediaElement.image}' alt='${mediaElement.title}'/>
-            <div class="media-title">${mediaElement.title}</div>
-         `
-    } else {
-        mediaItemPlaceholder.innerHTML = `
-        <video controls src='assets/images/media/${mediaElement.video}' alt='${mediaElement.title}'></video>
-        <div class="media-title">${mediaElement.title}</div>
-     `
-    }
-
-    //hide previous/next buttons if we are at the beginning/end of the array
-    if (currentlySelectedMediaIndex == 0) {
-        //hide previous button
-        document.getElementById('previous-btn').style.visibility = 'hidden'
-    } else if (currentlySelectedMediaIndex == (media.length - 1)) {
-        //hide next button
-        document.getElementById('next-btn').style.visibility = 'hidden'
-    } else {
-        document.getElementById('previous-btn').style.visibility = 'visible'
-        document.getElementById('next-btn').style.visibility = 'visible'
-    }
 }
 
 init();

@@ -12,12 +12,20 @@
   </head>
   <body>
     <header>
-      <img src="assets/images/logo.png" class="logo" />
+      <a href="./index.html" title="Fisheye Home page">
+        <img
+          src="assets/images/logo.png"
+          class="logo"
+          alt="Fisheye Home page"
+        />
+      </a>
     </header>
     <main id="main">
       <section class="photograph-header">
         <div class="photographer-info"></div>
-        <button class="contact_button">Contactez-moi</button>
+        <button class="contact_button" aria-label="Contactez-moi">
+          Contactez-moi
+        </button>
         <figure>
           <img src="" class="photographer-photo" />
         </figure>
@@ -31,8 +39,9 @@
               role="button"
               aria-haspopup="listbox"
               aria-expanded
+              aria-label="Trier par"
             >
-              Popularité
+              Défaut
             </button>
             <div
               class="dropdown-items"
@@ -50,42 +59,64 @@
       </section>
       <aside id="likes-counter"></aside>
     </main>
-    <div id="contact_modal" aria-modal>
-      <div class="modal">
+    <div id="contact_modal">
+      <dialog
+        class="modal"
+        aria-modal
+        aria-labelledby="contact_heading"
+        role="dialog"
+      >
         <header>
-          <h2>Contactez-moi</h2>
-          <div class="close-btn"><img src="assets/icons/close.svg" /></div>
+          <h1 id="contact_heading">Contactez-moi</h1>
+          <button class="close-btn" aria-label="Fermer la modale">
+            <img src="assets/icons/close.svg" />
+          </button>
         </header>
         <form>
           <div>
-            <label>Prénom</label>
-            <input name="name" />
+            <label for="name">Prénom</label>
+            <input name="name" id="name_field" />
           </div>
           <div>
-            <label>Nom</label>
-            <input name="surname" />
+            <label for="surname">Nom</label>
+            <input name="surname" id="surname_field" />
           </div>
           <div>
-            <label>Email</label>
-            <input name="email" />
+            <label for="email">Email</label>
+            <input name="email" id="email_field" />
           </div>
           <div>
-            <label>Votre message</label>
-            <textarea name="message" rows="10"></textarea>
+            <label for="message_box">Votre message</label>
+            <textarea name="message" id="message_box" rows="10"></textarea>
           </div>
           <button class="contact_button">Envoyer</button>
         </form>
-      </div>
+      </dialog>
     </div>
-    <div id="lightbox-modal" aria-modal>
-      <div class="modal">
-        <div class="close-btn"><img src="assets/icons/close.svg" /></div>
+    <div id="lightbox-modal">
+      <dialog
+        class="modal"
+        aria-modal
+        aria-label="Vue de l'image en dimensions originales"
+        role="dialog"
+      >
+        <button class="close-btn" aria-label="Fermer la modale">
+          <img src="assets/icons/close.svg" />
+        </button>
         <section class="modal-media">
-          <div id="previous-btn"><img src="assets/icons/previous.svg" /></div>
+          <div>
+            <a href="#" title="Image Précédente" id="previous-btn">
+              <img src="assets/icons/previous.svg" />
+            </a>
+          </div>
           <div id="media-item"></div>
-          <div id="next-btn"><img src="assets/icons/next.svg" /></div>
+          <div>
+            <a href="#" title="Image Suivante" id="next-btn">
+              <img src="assets/icons/next.svg" />
+            </a>
+          </div>
         </section>
-      </div>
+      </dialog>
     </div>
     <script src="/scripts/pages/photographer.js" type="module"></script>
     <script src="/scripts/utils/contactForm.js" type="module"></script>

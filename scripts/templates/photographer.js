@@ -5,8 +5,8 @@ export function photographerTemplate(data) {
     function getUserCardDOM() {
         const article = document.createElement('article');
         article.innerHTML = `
-        <a href="./photographer.html?id=${id}">
-            <img src="${picture}" alt=""/>
+        <a href="./photographer.html?id=${id}" title="${name}">
+            <img src="${picture}" alt="${name}"/>
             <h2>${name}</h2>
         </a>
         `
