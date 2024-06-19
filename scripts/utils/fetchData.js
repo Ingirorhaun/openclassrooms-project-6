@@ -1,6 +1,6 @@
 export const getPhotographers = async () => {
     try {
-        const response = await fetch('../../data/photographers.json')
+        const response = await fetch('data/photographers.json')
         if (!response.ok) {
             throw new Error(response.status)
         } else {
@@ -16,7 +16,7 @@ export const getPhotographers = async () => {
 
 export const getPhotographerById = async (photographerId) => {
     try {
-        const response = await fetch('../../data/photographers.json')
+        const response = await fetch('data/photographers.json')
         if (!response.ok) {
             throw new Error(response.status)
         } else {
@@ -30,7 +30,7 @@ export const getPhotographerById = async (photographerId) => {
 
 export const getMediaByPhotographerId = async (photographerId) => {
     try {
-        const response = await fetch('../../data/photographers.json')
+        const response = await fetch('data/photographers.json')
         if (!response.ok) {
             throw new Error(response.status)
         } else {
