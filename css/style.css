@@ -64,6 +64,7 @@ h1 {
   height: 200px;
   width: 200px;
   border-radius: 50%;
+  box-shadow: 0px 4px 12px 0px #00000040;
 }
 
 .photographer_section article h4 {
