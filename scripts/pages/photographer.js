@@ -88,7 +88,7 @@ const generateImageCard = (mediaElement) => {
     card.dataset.id = id;
     card.dataset.liked = liked
     card.innerHTML = `
-        <a alt="${title}" href="#">
+        <a href="#" title="${title}">
             <figure>
                 <img src="assets/images/media/thumbnail_${image}" alt="${title}"/>
             </figure>
@@ -108,9 +108,9 @@ const generateVideoCard = (mediaElement) => {
     card.dataset.id = id;
     card.dataset.liked = liked
     card.innerHTML = `
-        <a alt="${title}" href="#">
+        <a href="#" title="${title}">
             <figure>
-                <video src="assets/images/media/${video}" alt="${title}"/>
+                <video src="assets/images/media/${video}" title="${title}"/>
             </figure>
         </a>
         <div>
