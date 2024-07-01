@@ -12,12 +12,12 @@ const init = async () => {
     const photographer = await getPhotographerById(photographerId);
     media = await getMediaByPhotographerId(photographer.id);
 
-    //get list of liked media from local storage
+    //(temporary) get list of liked media from local storage and update the number of likes
     const likedMedia = readLikedMediaLocalStorage()
     media.forEach(el => {
-        el.liked = likedMedia?.includes(String(el.id)) || false
+        el.isLiked = likedMedia?.includes(String(el.id)) || false
         //add 1 if liked===true
-        el.likes += el.liked
+        el.likes += el.isLiked
     })
 
     populatePhotographerInfoSection(photographer);
@@ -82,11 +82,10 @@ const populateMediaSection = (media, sortMode) => {
 }
 
 const generateImageCard = (mediaElement) => {
-    const { title, image, likes, id, liked } = mediaElement
+    const { title, image, likes, id } = mediaElement
     const card = document.createElement("div")
     card.classList.add("media-card")
     card.dataset.id = id;
-    card.dataset.liked = liked
     card.innerHTML = `
         <a href="#" title="${title}">
             <figure>
@@ -102,11 +101,10 @@ const generateImageCard = (mediaElement) => {
 }
 
 const generateVideoCard = (mediaElement) => {
-    const { title, video, likes, id, liked } = mediaElement
+    const { title, video, likes, id } = mediaElement
     const card = document.createElement("div")
     card.classList.add("media-card")
     card.dataset.id = id;
-    card.dataset.liked = liked
     card.innerHTML = `
         <a href="#" title="${title}">
             <figure>
@@ -182,8 +180,7 @@ const createSortMenuEventListeners = () => {
 const addRemoveLike = (event) => {
     const card = event.target.closest(".media-card")
     const mediaId = card.dataset.id
-    const isLiked = (card.dataset.liked === "true")
-    card.dataset.liked = !isLiked
+    const isLiked = media.find(item => item.id == mediaId)?.isLiked
 
     if (!isLiked) {
         updateLikesCounter(card, 1)
@@ -191,11 +188,19 @@ const addRemoveLike = (event) => {
         updateLikesCounter(card, -1)
     }
 
+    //temporary
     updateLikedMediaLocalStorage(mediaId)
 }
 
 const updateLikesCounter = (card, value) => {
     //TODO make api call, increase local counter only if successful
+
+    //increase likes counter in media array
+    const mediaIndex = media.findIndex(item => item.id == card.dataset.id)
+    media[mediaIndex].likes += value
+    media[mediaIndex].isLiked = value == 1
+
+    //increase like counter in media card
     const currentLikes = Number(card.querySelector('[aria-label="likes"]').innerText)
     card.querySelector('[aria-label="likes"]').innerText = currentLikes + value
 
