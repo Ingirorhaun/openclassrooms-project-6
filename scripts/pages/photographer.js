@@ -38,7 +38,7 @@ const populatePhotographerInfoSection = (photographer) => {
 
     photographerInfoDiv.innerHTML = `
     <h2>${name}</h2>
-    <h4>${city}, ${country}</h4>
+    <h3>${city}, ${country}</h3>
     <p class='tagline'>${tagline}</p>
     `
     photographerPhoto.setAttribute('src', `assets/images/photographers/thumbnails/${portrait.substring(0, portrait.indexOf('.'))}_thumb.jpg`)
