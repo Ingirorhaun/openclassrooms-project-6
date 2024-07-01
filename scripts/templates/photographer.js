@@ -6,7 +6,10 @@ export function photographerTemplate(data) {
         const article = document.createElement('article');
         article.innerHTML = `
         <a href="./photographer.html?id=${id}" title="${name}">
-            <img src="${picture}" alt="${name}"/>
+            <figure>
+                <img src="${picture}" alt="${name}"/>
+                <div class="inset-box-shadow"></div>
+            </figure>
             <h2>${name}</h2>
         </a>
         `
