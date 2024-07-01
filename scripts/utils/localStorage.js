@@ -3,8 +3,8 @@
  * @returns {number[]} an array of media ids
  */
 export const readLikedMediaLocalStorage = () => {
-    return localStorage.getItem('likedMedia')?.split(',') || []
-}
+    return localStorage.getItem('likedMedia')?.split(',') || [];
+};
 
 
 /**
@@ -13,11 +13,11 @@ export const readLikedMediaLocalStorage = () => {
  * @returns {void}
  */
 export const updateLikedMediaLocalStorage = (id) => {
-    let likedMedia = readLikedMediaLocalStorage()
+    const likedMedia = readLikedMediaLocalStorage();
     if (likedMedia.includes(id)) {
-        likedMedia.splice(likedMedia.indexOf(id), 1)
+        likedMedia.splice(likedMedia.indexOf(id), 1);
     } else {
-        likedMedia.push(id)
+        likedMedia.push(id);
     }
-    localStorage.setItem('likedMedia', likedMedia)
-}
+    localStorage.setItem('likedMedia', likedMedia);
+};

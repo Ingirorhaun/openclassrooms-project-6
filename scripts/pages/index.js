@@ -9,13 +9,13 @@ const displayData = (photographers) => {
         const userCardDOM = photographerModel.getUserCardDOM();
         photographersSection.appendChild(userCardDOM);
     });
-}
+};
 
 const init = async () => {
     // Fetch photographers data
     const { photographers } = await getPhotographers();
     displayData(photographers);
-}
+};
 
 init();
 

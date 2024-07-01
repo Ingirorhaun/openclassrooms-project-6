@@ -12,15 +12,15 @@ export function photographerTemplate(data) {
             </figure>
             <h2>${name}</h2>
         </a>
-        `
-        const photographerInfo = document.createElement('div')
+        `;
+        const photographerInfo = document.createElement('div');
         photographerInfo.innerHTML = `
         <h3>${city}, ${country}</h3>
         <p class='tagline'>${tagline}</p>
         <p class='price'>${price}€</p>
-        `
-        article.appendChild(photographerInfo)
+        `;
+        article.appendChild(photographerInfo);
         return (article);
     }
-    return { name, picture, getUserCardDOM }
+    return { name, picture, getUserCardDOM };
 }

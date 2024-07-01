@@ -1,7 +1,7 @@
 export function displayContactModal() {
     const modal = document.getElementById("contact_modal");
     modal.style.display = "flex";
-    modal.querySelector('input').focus()
+    modal.querySelector('input').focus();
     document.addEventListener(`keydown`, initTrapFocus);
     document.addEventListener(`keydown`, handleKeyboard);
 }
@@ -14,18 +14,18 @@ export function closeContactModal() {
 }
 
 export const handleFormSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const formData = new FormData(e.target);
     for (const pair of formData.entries()) {
         console.log(pair[0], pair[1]);
     }
-}
+};
 
 const handleKeyboard = (e) => {
     if (e.key === 'Escape') {
-        closeContactModal()
+        closeContactModal();
     }
-}
+};
 
 export const trapFocus = (e, modal_id) => {
     const isTabPressed = e.key === 'Tab';
@@ -51,8 +51,8 @@ export const trapFocus = (e, modal_id) => {
         firstFocusableElement.focus();
         e.preventDefault();
     }
-}
+};
 
 const initTrapFocus = (e) => {
-    return trapFocus(e, 'contact_modal')
-}
+    return trapFocus(e, 'contact_modal');
+};
