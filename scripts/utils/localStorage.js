@@ -10,7 +10,6 @@ export const readLikedMediaLocalStorage = () => {
 /**
  * Updates the liked media ids array on local storage
  * @param {number} id A media id
- * @returns {void}
  */
 export const updateLikedMediaLocalStorage = (id) => {
     const likedMedia = readLikedMediaLocalStorage();

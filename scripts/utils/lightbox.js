@@ -4,10 +4,19 @@ let lightbox;
 let currentlyShownMediaIndex;
 let media;
 
+/**
+ * Function used to call trapFocus, so that it can be added as an event listener when the modal is opened and removed when it's closed
+ * @param {FocusEvent} e 
+ * @returns {Function}
+ */
 const initTrapFocus = (e) => {
     return trapFocus(e, 'lightbox-modal');
 };
 
+/**
+ * Store media items to global variable and create event listeners for lightbox buttons
+ * @param {import("../templates/mediaCard.js").MediaElement[]} m 
+ */
 export const initLightbox = (m) => {
     media = m;
     lightbox = document.getElementById('lightbox-modal');
@@ -15,12 +24,19 @@ export const initLightbox = (m) => {
     createPreviousNextButtonsEventListeners();
 };
 
+/**
+ * Changes the lightbox display to "none" and removes existing event listeners
+ */
 const closeLightbox = () => {
     lightbox.style.display = 'none';
     document.removeEventListener('keydown', handleKeyPress);
     document.removeEventListener('keydown', initTrapFocus);
 };
 
+/**
+ * Changes the lightbox display from "none" to "block", loads the selected media item and creates event listeners for lighbox buttons
+ * @param {Number} mediaId 
+ */
 export const openLightbox = (mediaId) => {
     if (mediaId) {
         setLightboxShownMedia(mediaId);
@@ -31,6 +47,10 @@ export const openLightbox = (mediaId) => {
     document.addEventListener('keydown', handleKeyPress);
 };
 
+/**
+ * Handles keyboard navigation within the lightbox
+ * @param {KeyboardEvent} event 
+ */
 const handleKeyPress = (event) => {
     const previousButton = document.getElementById('previous-btn');
     const nextButton = document.getElementById('next-btn');
@@ -54,6 +74,10 @@ const handleKeyPress = (event) => {
     }
 };
 
+/**
+ * Updates the media shown in the lightbox and removes previous/next buttons if necessary
+ * @param {Number} mediaId 
+ */
 const setLightboxShownMedia = (mediaId) => {
     const mediaElement = media.find(el => el.id == mediaId);
     currentlyShownMediaIndex = media.findIndex(el => el.id == mediaId);
@@ -83,14 +107,23 @@ const setLightboxShownMedia = (mediaId) => {
     }
 };
 
+/**
+ * Shows the previous media in the lightbox
+ */
 const showPreviousMedia = () => {
     setLightboxShownMedia(media[currentlyShownMediaIndex - 1].id);
 };
 
+/**
+ * Shows the next media in the lightbox
+ */
 const showNextMedia = () => {
     setLightboxShownMedia(media[currentlyShownMediaIndex + 1].id);
 };
 
+/**
+ * Creates event listeners for lightbox navigation buttons
+ */
 const createPreviousNextButtonsEventListeners = () => {
     const previousButton = document.getElementById('previous-btn');
     const nextButton = document.getElementById('next-btn');

@@ -1,3 +1,20 @@
+/**
+ * 
+ * @typedef {Object} Photographer
+ * @property {String} name
+ * @property {Number} id
+ * @property {String} city
+ * @property {String} country
+ * @property {String} tagline
+ * @property {Number} price
+ * @property {String} portrait
+ */
+
+/**
+ * Creates and returns a photographer's info card
+ * @param {Photographer} data 
+ * @returns {Object}
+ */
 export function photographerTemplate(data) {
     const { name, id, portrait, city, country, tagline, price } = data;
 

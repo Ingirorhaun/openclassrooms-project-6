@@ -1,3 +1,6 @@
+/**
+ * Changes the display property of the contact form from "none" to "flex" and adds event listeners for keyboard usage
+ */
 export function displayContactModal() {
     const modal = document.getElementById("contact_modal");
     modal.style.display = "flex";
@@ -6,6 +9,9 @@ export function displayContactModal() {
     document.addEventListener(`keydown`, handleKeyboard);
 }
 
+/**
+ * Changes the display property of the contact form from "flex" to "none" and removes existing event listeners
+ */
 export function closeContactModal() {
     const modal = document.getElementById("contact_modal");
     modal.style.display = "none";
@@ -13,6 +19,10 @@ export function closeContactModal() {
     document.removeEventListener(`keydown`, handleKeyboard);
 }
 
+/**
+ * Logs the form data to the console
+ * @param {SubmitEvent} e 
+ */
 export const handleFormSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -21,12 +31,21 @@ export const handleFormSubmit = (e) => {
     }
 };
 
+/**
+ * Closes contact form on "esc" key press
+ * @param {KeyboardEvent} e 
+ */
 const handleKeyboard = (e) => {
     if (e.key === 'Escape') {
         closeContactModal();
     }
 };
 
+/**
+ * Prevents tab key focus from moving to elements outside of the modal
+ * @param {FocusEvent} e 
+ * @param {String} modal_id The id of the html modal element
+ */
 export const trapFocus = (e, modal_id) => {
     const isTabPressed = e.key === 'Tab';
 
@@ -53,6 +72,11 @@ export const trapFocus = (e, modal_id) => {
     }
 };
 
+/**
+ * Function used to call trapFocus, so that it can be added as an event listener when the modal is opened and removed when it's closed
+ * @param {FocusEvent} e 
+ * @returns {Function}
+ */
 const initTrapFocus = (e) => {
     return trapFocus(e, 'contact_modal');
 };
