@@ -181,6 +181,7 @@
 .media-card button {
   font-size: 24px;
   color: var(--color-primary);
+  margin: 0;
 }
 
 .media-card span p {
