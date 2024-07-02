@@ -2,7 +2,7 @@ import { closeContactModal, displayContactModal, handleFormSubmit } from "../uti
 import { getPhotographerById, getMediaByPhotographerId } from "../utils/fetchData.js";
 import { initLightbox, openLightbox } from "../utils/lightbox.js";
 import { readLikedMediaLocalStorage, updateLikedMediaLocalStorage } from "../utils/localStorage.js";
-import { generateImageCard, generateVideoCard } from "../templates/mediaCard.js";
+import { generateMediaCard } from "../templates/mediaCard.js";
 
 let media;
 
@@ -87,13 +87,8 @@ const populateMediaSection = (media, sortMode) => {
     mediaGallery.setAttribute("id", "media-gallery");
 
     media.forEach(el => {
-        if (el.image) {
-            const imageCard = generateImageCard(el);
-            mediaGallery.appendChild(imageCard);
-        } else {
-            const videoCard = generateVideoCard(el);
-            mediaGallery.appendChild(videoCard);
-        }
+        const mediaCard = generateMediaCard(el);
+        mediaGallery.appendChild(mediaCard);
     });
 
     document.getElementById("media-section")?.appendChild(mediaGallery);
